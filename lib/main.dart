@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import 'app_controller.dart';
 import 'bible_storage.dart';
 import 'screens/read_screen.dart';
-import 'screens/saved_screen.dart';
+import 'screens/library_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/today_screen.dart';
 import 'splash.dart';
@@ -71,15 +72,27 @@ class _HomeShellState extends State<HomeShell> {
   void _goToReader() => setState(() => _tab = 1);
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _updateWakelock();
+  }
+
+  /// Keeps the screen on only while the reader tab is open and the setting is on.
+  void _updateWakelock() {
+    WakelockPlus.toggle(enable: _tab == 1 && widget.controller.keepScreenOn).catchError((_) {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     final c = widget.controller;
+    _updateWakelock();
     return Scaffold(
       body: IndexedStack(
         index: _tab,
         children: [
           TodayScreen(controller: c, onRead: _goToReader),
           ReadScreen(controller: c),
-          SavedScreen(controller: c, onOpen: _goToReader),
+          LibraryScreen(controller: c, onOpen: _goToReader),
           SettingsScreen(controller: c),
         ],
       ),
@@ -89,7 +102,7 @@ class _HomeShellState extends State<HomeShell> {
         destinations: const [
           NavigationDestination(icon: Icon(Icons.wb_sunny_outlined), selectedIcon: Icon(Icons.wb_sunny_rounded), label: 'Today'),
           NavigationDestination(icon: Icon(Icons.menu_book_outlined), selectedIcon: Icon(Icons.menu_book_rounded), label: 'Read'),
-          NavigationDestination(icon: Icon(Icons.bookmark_outline_rounded), selectedIcon: Icon(Icons.bookmark_rounded), label: 'Saved'),
+          NavigationDestination(icon: Icon(Icons.collections_bookmark_outlined), selectedIcon: Icon(Icons.collections_bookmark_rounded), label: 'Library'),
           NavigationDestination(icon: Icon(Icons.tune_outlined), selectedIcon: Icon(Icons.tune_rounded), label: 'Settings'),
         ],
       ),

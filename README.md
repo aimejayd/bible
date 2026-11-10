@@ -6,7 +6,10 @@ A Flutter starter app for reading Scripture in English, French, and Kinyarwanda.
 
 - Branded splash screen and app icon (source in `design/`)
 - Today screen: verse of the day, continue reading, browse Old and New Testament
-- Reader with Crimson Text typeface, adjustable text size, tap a verse to copy it
+- Reader with Crimson Text typeface, adjustable text size, swipe between chapters, keep screen on
+- Whole-Bible search, offline and accent-insensitive, that opens the chapter at the verse
+- Tap a verse to highlight it in five colours, add a note, copy it, or share it as a branded image
+- Library tab: saved chapters, highlights and notes
 - Full-screen book and chapter picker with search
 - Remembers where you stopped reading; saved chapters with swipe to remove
 - Light, dark or automatic appearance

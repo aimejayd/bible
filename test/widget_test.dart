@@ -18,6 +18,7 @@ void main() {
     await tester.pump(const Duration(seconds: 1));
     expect(find.text('Today'), findsOneWidget);
     expect(find.text('Read'), findsOneWidget);
+    expect(find.text('Library'), findsOneWidget);
     expect(find.text('VERSE OF THE DAY'), findsOneWidget);
   });
 

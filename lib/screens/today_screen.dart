@@ -7,6 +7,7 @@ import '../daily_verse.dart';
 import '../language.dart';
 import '../theme.dart';
 import 'book_picker.dart';
+import 'search_screen.dart';
 
 class TodayScreen extends StatelessWidget {
   const TodayScreen({super.key, required this.controller, required this.onRead});
@@ -48,7 +49,9 @@ class TodayScreen extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
+          _SearchBar(onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => SearchScreen(controller: controller, onOpen: onRead)))),
+          const SizedBox(height: 20),
           _VerseOfTheDay(controller: controller, onRead: onRead),
           const SizedBox(height: 28),
           const SectionLabel('Continue reading'),
@@ -206,6 +209,34 @@ class _VerseOfTheDayState extends State<_VerseOfTheDay> {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _SearchBar extends StatelessWidget {
+  const _SearchBar({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Material(
+      color: theme.cardTheme.color,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: theme.colorScheme.outlineVariant)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Icon(Icons.search_rounded, color: theme.colorScheme.onSurfaceVariant),
+              const SizedBox(width: 12),
+              Text('Search the Bible', style: TextStyle(color: theme.colorScheme.onSurfaceVariant, fontSize: 16)),
+            ],
+          ),
+        ),
       ),
     );
   }

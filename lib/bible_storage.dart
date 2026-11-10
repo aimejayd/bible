@@ -13,6 +13,8 @@ class BibleStorage {
   static const _positionKey = 'reading_position';
   static const _reminderKey = 'reminder_enabled';
   static const _reminderTimeKey = 'reminder_minutes';
+  static const _marksKey = 'verse_marks';
+  static const _keepScreenOnKey = 'keep_screen_on';
 
   Future<SharedPreferences> get _prefs => SharedPreferences.getInstance();
 
@@ -53,4 +55,13 @@ class BibleStorage {
   Future<int> reminderMinutes() async => (await _prefs).getInt(_reminderTimeKey) ?? 7 * 60;
 
   Future<void> setReminderMinutes(int value) async => (await _prefs).setInt(_reminderTimeKey, value);
+
+  /// Highlights and notes, as JSON.
+  Future<String?> marks() async => (await _prefs).getString(_marksKey);
+
+  Future<void> setMarks(String json) async => (await _prefs).setString(_marksKey, json);
+
+  Future<bool> keepScreenOn() async => (await _prefs).getBool(_keepScreenOnKey) ?? true;
+
+  Future<void> setKeepScreenOn(bool value) async => (await _prefs).setBool(_keepScreenOnKey, value);
 }

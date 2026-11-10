@@ -6,7 +6,9 @@ import 'bible_storage.dart';
 import 'bundled_bible.dart';
 import 'daily_verse.dart';
 import 'language.dart';
+import 'marks.dart';
 import 'notifications.dart';
+import 'search.dart';
 
 /// App-wide state: settings, where the reader is, and saved chapters.
 class AppController extends ChangeNotifier {
@@ -26,6 +28,13 @@ class AppController extends ChangeNotifier {
   DailyVerses dailyVerses = DailyVerses.empty;
   bool reminderEnabled = false;
   TimeOfDay reminderTime = const TimeOfDay(hour: 7, minute: 0);
+  Map<String, VerseMark> marks = {};
+  bool keepScreenOn = true;
+
+  /// Verse the reader should scroll to after opening a chapter (from search or notes).
+  int? pendingVerse;
+
+  final _searchIndexes = <String, Future<SearchIndex>>{};
 
   String get key => keyFor(language, book, chapter);
   static String keyFor(BibleLanguage language, BibleBook book, int chapter) =>
@@ -48,6 +57,8 @@ class AppController extends ChangeNotifier {
     reminderEnabled = await storage.reminderEnabled();
     final minutes = await storage.reminderMinutes();
     reminderTime = TimeOfDay(hour: minutes ~/ 60, minute: minutes % 60);
+    marks = VerseMark.decodeAll(await storage.marks());
+    keepScreenOn = await storage.keepScreenOn();
     final parts = (await storage.position())?.split('|');
     if (parts != null && parts.length == 3) {
       final lang = BibleLanguage.values.where((l) => l.name == parts[0]);
@@ -120,11 +131,57 @@ class AppController extends ChangeNotifier {
     if (reminderEnabled) _scheduleReminders();
   }
 
-  void openPassage(BibleBook newBook, int newChapter, {BibleLanguage? inLanguage}) {
+  void openPassage(BibleBook newBook, int newChapter, {BibleLanguage? inLanguage, int? verse}) {
     if (inLanguage != null) language = inLanguage;
     book = newBook;
     chapter = newChapter.clamp(1, language.chapterCount(newBook));
+    pendingVerse = verse;
     _changed();
+  }
+
+  void setKeepScreenOn(bool value) {
+    keepScreenOn = value;
+    notifyListeners();
+    storage.setKeepScreenOn(value);
+  }
+
+  // Highlights and notes -----------------------------------------------------
+
+  VerseMark? markFor(int verse) => marks[VerseMark.keyFor(book.number, chapter, verse)];
+
+  void setHighlight(int verse, HighlightColor? color) {
+    final key = VerseMark.keyFor(book.number, chapter, verse);
+    final current = marks[key] ?? VerseMark(book: book.number, chapter: chapter, verse: verse, updated: DateTime.now());
+    _putMark(key, current.copyWith(color: color, clearColor: color == null));
+  }
+
+  void setNote(int verse, String? note) {
+    final key = VerseMark.keyFor(book.number, chapter, verse);
+    final current = marks[key] ?? VerseMark(book: book.number, chapter: chapter, verse: verse, updated: DateTime.now());
+    final trimmed = note?.trim();
+    _putMark(key, current.copyWith(note: trimmed, clearNote: trimmed == null || trimmed.isEmpty));
+  }
+
+  void removeMark(String key) => _putMark(key, null);
+
+  void _putMark(String key, VerseMark? mark) {
+    marks = {...marks};
+    if (mark == null || mark.isEmpty) {
+      marks.remove(key);
+    } else {
+      marks[key] = mark;
+    }
+    notifyListeners();
+    storage.setMarks(VerseMark.encodeAll(marks));
+  }
+
+  // Search -------------------------------------------------------------------
+
+  /// The search index for [lang], built once per language and kept in memory.
+  Future<SearchIndex>? searchIndex(BibleLanguage lang) {
+    final code = lang.code;
+    if (code == null) return null;
+    return _searchIndexes.putIfAbsent(code, () => SearchIndex.load(code));
   }
 
   void next() {

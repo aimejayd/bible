@@ -28,6 +28,16 @@ class SettingsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Card(child: Padding(padding: const EdgeInsets.fromLTRB(16, 16, 16, 8), child: TextSizeControl(controller: controller))),
+            const SizedBox(height: 10),
+            Card(
+              child: SwitchListTile(
+                secondary: const Icon(Icons.screen_lock_portrait_outlined),
+                title: const Text('Keep screen on'),
+                subtitle: const Text('While you are on the Read tab'),
+                value: controller.keepScreenOn,
+                onChanged: controller.setKeepScreenOn,
+              ),
+            ),
             const SizedBox(height: 24),
             const SectionLabel('Appearance'),
             Card(
