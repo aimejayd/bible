@@ -29,6 +29,9 @@ jobs:
       - name: Get packages
         run: flutter pub get
 
+      - name: Check code
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+
       - name: Build release APK
         run: flutter build apk --release
 

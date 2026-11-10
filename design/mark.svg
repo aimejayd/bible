@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Ijambo mark: an open Bible with a cross rising from the spine -->
+  <defs>
+    <linearGradient id="page" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFBF2"/>
+      <stop offset="1" stop-color="#EFE4CF"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(0 18)">
+  <g fill="#D4A657">
+    <rect x="243" y="70" width="26" height="128" rx="6"/>
+    <rect x="208" y="104" width="96" height="24" rx="6"/>
+  </g>
+  <path fill="url(#page)" d="M252 226 C 206 200 146 194 92 208 L 92 388 C 146 374 206 380 252 406 Z"/>
+  <path fill="url(#page)" d="M260 226 C 306 200 366 194 420 208 L 420 388 C 366 374 306 380 260 406 Z"/>
+  <g stroke="#D4A657" stroke-width="7" stroke-linecap="round" fill="none" opacity="0.55">
+    <path d="M124 252 C 160 244 196 246 226 258"/>
+    <path d="M124 284 C 160 276 196 278 226 290"/>
+    <path d="M124 316 C 160 308 196 310 226 322"/>
+    <path d="M388 252 C 352 244 316 246 286 258"/>
+    <path d="M388 284 C 352 276 316 278 286 290"/>
+    <path d="M388 316 C 352 308 316 310 286 322"/>
+  </g>
+  </g>
+</svg>

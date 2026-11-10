@@ -22,3 +22,9 @@ const frenchBookNames = [
 
 /// French Bibles divide Joel into 4 chapters and Malachi into 3.
 const frenchChapterCounts = {29: 4, 39: 3};
+
+/// Book names used in Kinyarwanda Bibles, in the same order as [bibleBooks].
+const kinyarwandaBookNames = [
+  'Itangiriro', 'Kuva', 'Abalewi', 'Kubara', 'Gutegeka kwa kabiri', 'Yosuwa', 'Abacamanza', 'Rusi', '1 Samweli', '2 Samweli', '1 Abami', '2 Abami', '1 Ngoma', '2 Ngoma', 'Ezira', 'Nehemiya', 'Esiteri', 'Yobu', 'Zaburi', 'Imigani', 'Umubwiriza', 'Indirimbo ya Salomo', 'Yesaya', 'Yeremiya', 'Amaganya', 'Ezekiyeli', 'Daniyeli', 'Hoseya', 'Yoweli', 'Amosi', 'Obadiya', 'Yona', 'Mika', 'Nahumu', 'Habakuki', 'Zefaniya', 'Hagayi', 'Zekariya', 'Malaki',
+  'Matayo', 'Mariko', 'Luka', 'Yohana', 'Ibyakozwe n’Intumwa', 'Abaroma', '1 Abakorinto', '2 Abakorinto', 'Abagalatiya', 'Abefeso', 'Abafilipi', 'Abakolosayi', '1 Abatesalonike', '2 Abatesalonike', '1 Timoteyo', '2 Timoteyo', 'Tito', 'Filemoni', 'Abaheburayo', 'Yakobo', '1 Petero', '2 Petero', '1 Yohana', '2 Yohana', '3 Yohana', 'Yuda', 'Ibyahishuwe',
+];

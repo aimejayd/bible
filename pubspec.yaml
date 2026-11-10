@@ -21,3 +21,14 @@ flutter:
   assets:
     - assets/bibles/web/
     - assets/bibles/darby/
+    - assets/brand/
+  fonts:
+    - family: Crimson
+      fonts:
+        - asset: assets/fonts/CrimsonText-Regular.ttf
+        - asset: assets/fonts/CrimsonText-Italic.ttf
+          style: italic
+        - asset: assets/fonts/CrimsonText-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/CrimsonText-Bold.ttf
+          weight: 700

@@ -4,22 +4,21 @@ A Flutter starter app for reading Scripture in English, French, and Kinyarwanda.
 
 ## Included
 
-- Language switcher for English, Français, and Kinyarwanda
-- Genesis 1 reading view with translated sample text
-- Full English (World English Bible) and French (Bible Darby, 1885) texts bundled in the app, so every chapter works offline
-- Book names and chapter numbering follow each language (French Joel has 4 chapters, Malachi 3)
-- Verse of the day card
-- Books, saved passages, and settings screens
-- Material 3 interface designed for phones
+- Branded splash screen and app icon (source in `design/`)
+- Today screen: verse of the day, continue reading, browse Old and New Testament
+- Reader with Crimson Text typeface, adjustable text size, tap a verse to copy it
+- Full-screen book and chapter picker with search
+- Remembers where you stopped reading; saved chapters with swipe to remove
+- Light, dark or automatic appearance
+- Full English (World English Bible) and French (Bible Darby, 1885) texts bundled, so every chapter works offline
+- French and Kinyarwanda book names; French chapter numbering (Joel 4, Malachi 3)
+- Kinyarwanda: Genesis 1 preview until the Bible Society of Rwanda text is licensed
 
-## Run it
+## Build
 
-From this folder, use a Flutter SDK to generate the platform wrappers once and launch the app:
+Every push to `main` builds an APK on GitHub Actions and publishes it under Releases.
+Locally: `flutter pub get` then `flutter build apk --release`.
 
-```powershell
-flutter create .
-flutter pub get
-flutter run
-```
+## Data
 
-English WEB and French Darby are read from `assets/bibles/<edition>/<book>.json`, built from the public-domain texts in [midvash/bible-data](https://github.com/midvash/bible-data). Each file is `{"c": [[[verse, "text"], ...], ...]}` with one list per chapter. GetBible's API is only used if a bundled chapter is missing. Kinyarwanda remains a sample until a Bible Society of Rwanda / Digital Bible Library licence and API credential are approved; do not ship a complete Kinyarwanda edition without that permission.
+English WEB and French Darby are read from `assets/bibles/<edition>/<book>.json`, built from the public-domain texts in [midvash/bible-data](https://github.com/midvash/bible-data). Each file is `{"c": [[[verse, "text"], ...], ...]}` with one list per chapter. Do not ship a complete Kinyarwanda edition without permission from the Bible Society of Rwanda.
