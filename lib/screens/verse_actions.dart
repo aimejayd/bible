@@ -21,7 +21,8 @@ Future<void> showVerseActions(BuildContext context, AppController controller, Bi
       listenable: controller,
       builder: (_, __) {
         final mark = controller.markFor(verse.number);
-        final hasNote = mark?.note != null && mark.note!.isNotEmpty;
+        final note = mark?.note;
+        final hasNote = note != null && note.isNotEmpty;
         return SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
@@ -59,7 +60,7 @@ Future<void> showVerseActions(BuildContext context, AppController controller, Bi
                   contentPadding: EdgeInsets.zero,
                   leading: Icon(hasNote ? Icons.sticky_note_2_rounded : Icons.sticky_note_2_outlined, color: hasNote ? Brand.gold : null),
                   title: Text(hasNote ? 'Edit note' : 'Add note'),
-                  subtitle: hasNote ? Text(mark!.note!, maxLines: 1, overflow: TextOverflow.ellipsis) : null,
+                  subtitle: hasNote ? Text(note, maxLines: 1, overflow: TextOverflow.ellipsis) : null,
                   onTap: () => editNote(sheetContext, controller, verse.number, reference),
                 ),
                 ListTile(
