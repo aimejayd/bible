@@ -4,7 +4,9 @@ import 'bible_api.dart';
 import 'bible_catalog.dart';
 import 'bible_storage.dart';
 import 'bundled_bible.dart';
+import 'daily_verse.dart';
 import 'language.dart';
+import 'notifications.dart';
 
 /// App-wide state: settings, where the reader is, and saved chapters.
 class AppController extends ChangeNotifier {
@@ -13,6 +15,7 @@ class AppController extends ChangeNotifier {
   final BibleStorage storage;
   final _bundle = BundledBible();
   final _api = BibleApi();
+  final _notifications = VerseNotifications();
 
   ThemeMode themeMode = ThemeMode.system;
   double textScale = 1.0;
@@ -20,6 +23,9 @@ class AppController extends ChangeNotifier {
   BibleBook book = bibleBooks.first;
   int chapter = 1;
   Set<String> saved = {};
+  DailyVerses dailyVerses = DailyVerses.empty;
+  bool reminderEnabled = false;
+  TimeOfDay reminderTime = const TimeOfDay(hour: 7, minute: 0);
 
   String get key => keyFor(language, book, chapter);
   static String keyFor(BibleLanguage language, BibleBook book, int chapter) =>
@@ -38,6 +44,10 @@ class AppController extends ChangeNotifier {
     };
     textScale = await storage.textScale();
     saved = await storage.savedChapters();
+    dailyVerses = await DailyVerses.load();
+    reminderEnabled = await storage.reminderEnabled();
+    final minutes = await storage.reminderMinutes();
+    reminderTime = TimeOfDay(hour: minutes ~/ 60, minute: minutes % 60);
     final parts = (await storage.position())?.split('|');
     if (parts != null && parts.length == 3) {
       final lang = BibleLanguage.values.where((l) => l.name == parts[0]);
@@ -47,6 +57,47 @@ class AppController extends ChangeNotifier {
       chapter = (int.tryParse(parts[2]) ?? 1).clamp(1, language.chapterCount(book));
     }
     notifyListeners();
+    if (reminderEnabled) _scheduleReminders();
+  }
+
+  /// Turns the morning verse notification on or off. Returns false if the phone refused permission.
+  Future<bool> setReminderEnabled(bool value) async {
+    if (value && !await _notifications.requestPermission()) return false;
+    reminderEnabled = value;
+    notifyListeners();
+    await storage.setReminderEnabled(value);
+    value ? await _scheduleReminders() : await _notifications.cancelAll();
+    return true;
+  }
+
+  Future<void> setReminderTime(TimeOfDay time) async {
+    reminderTime = time;
+    notifyListeners();
+    await storage.setReminderMinutes(time.hour * 60 + time.minute);
+    if (reminderEnabled) await _scheduleReminders();
+  }
+
+  /// Schedules the next two weeks of morning verses in the reading language.
+  Future<void> _scheduleReminders() async {
+    try {
+      // Kinyarwanda has no full text yet, so its reminders use English.
+      final lang = language.code == null ? BibleLanguage.english : language;
+      final now = DateTime.now();
+      final reminders = <VerseReminder>[];
+      for (var day = 0; reminders.length < 14 && day < 15; day++) {
+        final date = DateTime(now.year, now.month, now.day + day, reminderTime.hour, reminderTime.minute);
+        if (!date.isAfter(now)) continue;
+        final ref = dailyVerses.forDate(date);
+        final text = await verseText(lang, ref.$1, ref.$2, ref.$3);
+        if (text == null) continue;
+        final reference = '${lang.bookName(bibleBooks[ref.$1 - 1])} ${ref.$2}:${ref.$3}';
+        final feast = dailyVerses.feastName(date);
+        reminders.add(VerseReminder(when: date, title: feast == null ? reference : '$feast · $reference', body: tidyVerse(text)));
+      }
+      await _notifications.schedule(reminders);
+    } catch (e) {
+      debugPrint('Could not schedule verse reminders: $e');
+    }
   }
 
   void setThemeMode(ThemeMode mode) {
@@ -66,6 +117,7 @@ class AppController extends ChangeNotifier {
     language = value;
     chapter = chapter.clamp(1, language.chapterCount(book));
     _changed();
+    if (reminderEnabled) _scheduleReminders();
   }
 
   void openPassage(BibleBook newBook, int newChapter, {BibleLanguage? inLanguage}) {

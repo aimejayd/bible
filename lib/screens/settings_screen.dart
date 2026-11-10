@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../app_controller.dart';
 import '../language.dart';
 import '../theme.dart';
+import '../notifications.dart';
 import 'sheets.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -45,6 +46,40 @@ class SettingsScreen extends StatelessWidget {
                     onSelectionChanged: (value) => controller.setThemeMode(value.first),
                   ),
                 ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            const SectionLabel('Daily verse'),
+            Card(
+              child: Column(
+                children: [
+                  SwitchListTile(
+                    secondary: const Icon(Icons.notifications_active_outlined),
+                    title: const Text('Morning reminder'),
+                    subtitle: const Text('A notification with the verse of the day'),
+                    value: controller.reminderEnabled,
+                    onChanged: (value) async {
+                      final ok = await controller.setReminderEnabled(value);
+                      if (!ok && context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Allow notifications for Ijambo Bible in your phone settings to get the daily verse.')),
+                        );
+                      }
+                    },
+                  ),
+                  if (controller.reminderEnabled) ...[
+                    const Divider(indent: 16, endIndent: 16),
+                    ListTile(
+                      leading: const Icon(Icons.schedule_rounded),
+                      title: const Text('Reminder time'),
+                      trailing: Text(formatTime(controller.reminderTime), style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+                      onTap: () async {
+                        final picked = await showTimePicker(context: context, initialTime: controller.reminderTime);
+                        if (picked != null) await controller.setReminderTime(picked);
+                      },
+                    ),
+                  ],
+                ],
               ),
             ),
             const SizedBox(height: 24),

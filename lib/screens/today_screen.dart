@@ -111,7 +111,9 @@ class _VerseOfTheDay extends StatefulWidget {
 }
 
 class _VerseOfTheDayState extends State<_VerseOfTheDay> {
-  final (int, int, int) _ref = verseForToday();
+  final DateTime _today = DateTime.now();
+  late final VerseRef _ref = widget.controller.dailyVerses.forDate(_today);
+  late final String? _feast = widget.controller.dailyVerses.feastName(_today);
   Future<String?>? _text;
   BibleLanguage? _loadedFor;
 
@@ -142,11 +144,19 @@ class _VerseOfTheDayState extends State<_VerseOfTheDay> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.wb_sunny_rounded, color: Brand.gold, size: 16),
-              SizedBox(width: 8),
-              Text('VERSE OF THE DAY', style: TextStyle(color: Brand.gold, letterSpacing: 1.4, fontSize: 12, fontWeight: FontWeight.w700)),
+              const Icon(Icons.wb_sunny_rounded, color: Brand.gold, size: 16),
+              const SizedBox(width: 8),
+              const Text('VERSE OF THE DAY', style: TextStyle(color: Brand.gold, letterSpacing: 1.4, fontSize: 12, fontWeight: FontWeight.w700)),
+              const Spacer(),
+              if (_feast != null)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(color: Brand.gold.withValues(alpha: .2), borderRadius: BorderRadius.circular(20)),
+                  child: Text(_feast!, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700)),
+                ),
+              const SizedBox(width: 8),
             ],
           ),
           const SizedBox(height: 14),

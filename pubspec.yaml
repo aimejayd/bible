@@ -10,6 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
   shared_preferences: ^2.3.2
+  flutter_local_notifications: ^19.4.0
+  timezone: ^0.10.1
 
 dev_dependencies:
   flutter_test:
@@ -22,6 +24,7 @@ flutter:
     - assets/bibles/web/
     - assets/bibles/darby/
     - assets/brand/
+    - assets/verses/
   fonts:
     - family: Crimson
       fonts:

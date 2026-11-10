@@ -11,6 +11,8 @@ class BibleStorage {
   static const _themeKey = 'theme_mode';
   static const _textScaleKey = 'text_scale';
   static const _positionKey = 'reading_position';
+  static const _reminderKey = 'reminder_enabled';
+  static const _reminderTimeKey = 'reminder_minutes';
 
   Future<SharedPreferences> get _prefs => SharedPreferences.getInstance();
 
@@ -42,4 +44,13 @@ class BibleStorage {
   Future<String?> position() async => (await _prefs).getString(_positionKey);
 
   Future<void> setPosition(String value) async => (await _prefs).setString(_positionKey, value);
+
+  Future<bool> reminderEnabled() async => (await _prefs).getBool(_reminderKey) ?? false;
+
+  Future<void> setReminderEnabled(bool value) async => (await _prefs).setBool(_reminderKey, value);
+
+  /// Minutes after midnight; default 7:00.
+  Future<int> reminderMinutes() async => (await _prefs).getInt(_reminderTimeKey) ?? 7 * 60;
+
+  Future<void> setReminderMinutes(int value) async => (await _prefs).setInt(_reminderTimeKey, value);
 }
