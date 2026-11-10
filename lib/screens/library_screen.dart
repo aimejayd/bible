@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../app_controller.dart';
 import '../bible_catalog.dart';
 import '../language.dart';
-import '../marks.dart';
 import '../theme.dart';
 
 /// Saved chapters, highlights and notes.

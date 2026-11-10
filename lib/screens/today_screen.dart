@@ -157,7 +157,7 @@ class _VerseOfTheDayState extends State<_VerseOfTheDay> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(color: Brand.gold.withValues(alpha: .2), borderRadius: BorderRadius.circular(20)),
-                  child: Text(_feast!, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700)),
+                  child: Text(_feast, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700)),
                 ),
               const SizedBox(width: 8),
             ],

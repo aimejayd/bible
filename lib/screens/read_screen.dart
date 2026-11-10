@@ -186,7 +186,7 @@ class _VerseView extends StatelessWidget {
     final dark = theme.brightness == Brightness.dark;
     final size = 21 * controller.textScale;
     final mark = controller.markFor(verse.number);
-    final hasNote = mark?.note != null && mark!.note!.isNotEmpty;
+    final hasNote = mark?.note != null && mark.note!.isNotEmpty;
     final highlight = mark?.color == null ? null : (dark ? mark!.color!.dim : mark!.color!.color);
     return AnimatedContainer(
       duration: const Duration(milliseconds: 400),

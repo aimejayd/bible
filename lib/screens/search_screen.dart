@@ -109,7 +109,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _body(ThemeData theme) {
     if (_query.length < 2) {
-      return _Hint(
+      return const _Hint(
         icon: Icons.search_rounded,
         title: 'Search every verse',
         text: 'Type a word or a phrase, for example "shepherd", "berger" or "do not fear". Accents do not matter.',
@@ -117,7 +117,7 @@ class _SearchScreenState extends State<SearchScreen> {
     }
     final hits = _hits;
     if (hits == null) return const Center(child: CircularProgressIndicator());
-    if (hits.isEmpty) return _Hint(icon: Icons.search_off_rounded, title: 'No verses found', text: 'Try fewer words or a different spelling.');
+    if (hits.isEmpty) return const _Hint(icon: Icons.search_off_rounded, title: 'No verses found', text: 'Try fewer words or a different spelling.');
     return ListView.separated(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
       itemCount: hits.length + 1,

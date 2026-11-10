@@ -4,6 +4,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../app_controller.dart';
 import '../bible_api.dart';
+import '../language.dart';
 import '../marks.dart';
 import '../theme.dart';
 import 'share_verse_screen.dart';
@@ -20,7 +21,7 @@ Future<void> showVerseActions(BuildContext context, AppController controller, Bi
       listenable: controller,
       builder: (_, __) {
         final mark = controller.markFor(verse.number);
-        final hasNote = mark?.note != null && mark!.note!.isNotEmpty;
+        final hasNote = mark?.note != null && mark.note!.isNotEmpty;
         return SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),

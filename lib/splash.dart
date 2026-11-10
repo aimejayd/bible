@@ -30,9 +30,9 @@ class _SplashViewState extends State<SplashView> with SingleTickerProviderStateM
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Positioned.fill(
+            const Positioned.fill(
               child: DecoratedBox(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   gradient: RadialGradient(colors: [Color(0xFF285F52), Brand.green, Brand.greenDeep], stops: [0, .55, 1], radius: 1.1),
                 ),
               ),
